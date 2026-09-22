@@ -1,26 +1,79 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+
+@theme {
+  /* Mi Casa De Cagsawa Palette */
+  --color-phthalo: #103713;
+  --color-maximum: #628B35;
+  --color-bone: #E2DBD0;
+  --color-milk: #FFFDF5;
+
+  --color-phthalo-light: #1a4d1f;
+  --color-phthalo-dark: #0a2409;
+  --color-maximum-dark: #4f7029;
+  --color-maximum-light: #7da84a;
+  --color-bone-dark: #d4cbbd;
+  --color-milk-dark: #f5f0e2;
+
+  /* Fonts */
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-fraunces), Georgia, serif;
+}
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #FFFDF5;
+  --foreground: #103713;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+* {
+  box-sizing: border-box;
+  border-color: #E2DBD0;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html, body {
+  font-family: var(--font-sans);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  color: #103713;
+  background-color: #FFFDF5;
+  background-image: url('/mi-casa-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  position: relative;
+  min-height: 100vh;
+}
+
+/* Warm overlay so text stays readable over the photo */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-color: rgba(255, 253, 245, 0.94);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Serif for headings */
+h1, h2, h3, h4 {
+  font-family: var(--font-serif);
+  letter-spacing: -0.01em;
+}
+
+/* Focus ring for accessibility */
+:focus-visible {
+  outline: 2px solid #628B35;
+  outline-offset: 2px;
+}
+
+/* Leaflet map fixes */
+.leaflet-container {
+  font-family: inherit;
+  z-index: 0;
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 8px;
 }

@@ -1,0 +1,88 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  fullName     String
+  role         String   @default("ADMIN")
+  createdAt    DateTime @default(now())
+}
+
+model Room {
+  id           String   @id @default(cuid())
+  roomNumber   Int      @unique
+  name         String
+  description  String?
+  capacity     Int
+  basePrice    Float
+  amenities    String   @default("")
+  imageUrl     String?
+  imageAlt     String?
+  category     String   @default("Standard")
+  status       String   @default("AVAILABLE")
+  isActive     Boolean  @default(true)
+  reservations Reservation[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Reservation {
+  id            String   @id @default(cuid())
+  bookingRef    String   @unique
+  guestFullName String
+  guestEmail    String
+  guestPhone    String?
+  guestGender   String?
+  guestTitle    String?
+  roomId        String
+  room          Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  checkIn       DateTime
+  checkOut      DateTime
+  guestCount    Int
+  status        String   @default("PENDING")
+  paymentStatus String   @default("UNPAID")
+  paymentRef    String?
+  totalPrice    Float
+  depositPaid   Boolean  @default(false)
+  depositAmount Float    @default(1000)
+  notes         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Promo {
+  id          String   @id @default(cuid())
+  code        String   @unique
+  description String
+  discountPct Int
+  validFrom   DateTime
+  validUntil  DateTime
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+}
+
+model Review {
+  id          String   @id @default(cuid())
+  guestName   String
+  rating      Int
+  comment     String
+  isPublished Boolean  @default(false)
+  createdAt   DateTime @default(now())
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  title     String
+  message   String
+  type      String   @default("SYSTEM")
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
