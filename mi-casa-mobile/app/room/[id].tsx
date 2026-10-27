@@ -55,7 +55,7 @@ export default function RoomDetailScreen() {
 
   return (
     <View style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 100 }}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 120 }}>
         <Image source={{ uri: imageUrl }} style={styles.heroImage} />
         
         <View style={styles.content}>
@@ -91,6 +91,7 @@ export default function RoomDetailScreen() {
         <TouchableOpacity 
           style={[styles.bookButton, room.status === 'BOOKED' && styles.bookButtonDisabled]}
           disabled={room.status === 'BOOKED'}
+          onPress={() => router.push(`/room/book/${room.id}`)}
         >
           <Text style={styles.bookButtonText}>
             {room.status === 'BOOKED' ? 'Currently Booked' : 'Book This Room'}

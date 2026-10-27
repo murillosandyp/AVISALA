@@ -19,6 +19,16 @@ export default function RootLayout() {
             headerBackTitle: 'Back',
           }}
         />
+        <Stack.Screen
+          name="room/book/[id]"
+          options={{
+            headerShown: true,
+            title: 'Book Room',
+            headerStyle: { backgroundColor: '#FFFDF5' },
+            headerTintColor: '#103713',
+            presentation: 'modal',
+          }}
+        />
       </Stack>
     </>
   )
