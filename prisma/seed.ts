@@ -29,8 +29,10 @@ async function main() {
       capacity: 10,
       basePrice: 3500,
       amenities: 'AC, WiFi, Smart TV, Private Bathroom',
+      imageUrl: '/rooms/room-1.png',
       imageAlt: 'Room 1 with two double beds and air conditioning',
       status: 'BOOKED',
+      category: 'Standard',
     },
     {
       roomNumber: 2,
@@ -39,8 +41,10 @@ async function main() {
       capacity: 10,
       basePrice: 3500,
       amenities: 'AC, WiFi, Smart TV, Private Bathroom',
+      imageUrl: '/rooms/room-2.png',
       imageAlt: 'Room 2 with multiple beds for group stays',
       status: 'BOOKED',
+      category: 'Standard',
     },
     {
       roomNumber: 3,
@@ -49,8 +53,10 @@ async function main() {
       capacity: 4,
       basePrice: 2200,
       amenities: 'AC, WiFi, Smart TV, Private Bathroom',
+      imageUrl: '/rooms/room-3.png',
       imageAlt: 'Room 3 with one queen bed and warm lighting',
       status: 'AVAILABLE',
+      category: 'Standard',
     },
     {
       roomNumber: 4,
@@ -59,8 +65,10 @@ async function main() {
       capacity: 4,
       basePrice: 2500,
       amenities: 'AC, WiFi, Smart TV, Private Bathroom, Mayon View',
+      imageUrl: '/rooms/room-4.png',
       imageAlt: 'Room 4 with a large window showing Mayon Volcano',
       status: 'AVAILABLE',
+      category: 'Deluxe',
     },
   ]
 
@@ -93,6 +101,7 @@ async function main() {
       totalPrice: 7000,
       depositPaid: true,
       notes: 'Celebrating a birthday',
+      source: 'ADMIN',
     },
     {
       bookingRef: 'MC-2024-002',
@@ -109,6 +118,7 @@ async function main() {
       paymentStatus: 'UNPAID',
       totalPrice: 7000,
       depositPaid: false,
+      source: 'ADMIN',
     },
     {
       bookingRef: 'MC-2024-003',
@@ -126,6 +136,7 @@ async function main() {
       paymentRef: 'GCASH-88100',
       totalPrice: 4400,
       depositPaid: true,
+      source: 'ADMIN',
     },
     {
       bookingRef: 'MC-2024-004',
@@ -142,6 +153,7 @@ async function main() {
       paymentRef: 'GCASH-88250',
       totalPrice: 5000,
       depositPaid: true,
+      source: 'ADMIN',
     },
     {
       bookingRef: 'MC-2024-005',
@@ -159,6 +171,7 @@ async function main() {
       paymentRef: 'GCASH-87950',
       totalPrice: 7000,
       depositPaid: true,
+      source: 'ADMIN',
     },
   ]
 
@@ -216,6 +229,20 @@ async function main() {
     ],
   })
   console.log('✅ Notifications created')
+
+  // 7. Test customer for mobile app
+  const customerPasswordHash = await bcrypt.hash('Customer@123', 10)
+  await prisma.customer.upsert({
+    where: { email: 'guest@micasa.com' },
+    update: {},
+    create: {
+      email: 'guest@micasa.com',
+      passwordHash: customerPasswordHash,
+      fullName: 'Test Guest',
+      phone: '09171234567',
+    },
+  })
+  console.log('✅ Test customer created: guest@micasa.com / Customer@123')
 
   console.log('🎉 Seeding complete!')
 }
