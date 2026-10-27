@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
+import { prisma } from '@/mi-casa-mobile/lib/prisma'
 
 // GET — fetch bookings for a specific customer
 export async function GET(req: Request) {

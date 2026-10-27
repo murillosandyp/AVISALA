@@ -1,4 +1,4 @@
-import { prisma } from '@/lib/prisma'
+import { prisma } from '@/mi-casa-mobile/lib/prisma'
 import { CalendarView } from './calendar-view'
 
 export const dynamic = 'force-dynamic'

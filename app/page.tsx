@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { prisma } from '@/lib/prisma'
+import { prisma } from '@/mi-casa-mobile/lib/prisma'
 import { Badge } from '@/components/ui/badge'
 import {
   DoorOpen,

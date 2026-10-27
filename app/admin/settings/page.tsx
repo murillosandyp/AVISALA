@@ -1,6 +1,6 @@
 import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
-import { prisma } from '@/lib/prisma'
+import { prisma } from '@/mi-casa-mobile/lib/prisma'
 import { SettingsForm } from './settings-form'
 
 export const dynamic = 'force-dynamic'

@@ -1,4 +1,4 @@
-import { prisma } from '@/lib/prisma'
+import { prisma } from '@/mi-casa-mobile/lib/prisma'
 import { BarChart3, TrendingUp, Users, DoorOpen } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'

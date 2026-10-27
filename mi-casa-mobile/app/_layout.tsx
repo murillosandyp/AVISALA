@@ -16,6 +16,7 @@ export default function RootLayout() {
             title: 'Room Details',
             headerStyle: { backgroundColor: '#FFFDF5' },
             headerTintColor: '#103713',
+            headerBackTitle: 'Back',
           }}
         />
       </Stack>
