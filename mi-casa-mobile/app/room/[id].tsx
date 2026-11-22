@@ -50,7 +50,7 @@ export default function RoomDetailScreen() {
   }
 
   const imageUrl = room.imageUrl
-    ? `http://192.168.100.67:3000${room.imageUrl}`
+    ? `http://192.168.100.118:3000${room.imageUrl}`
     : 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80'
 
   return (
