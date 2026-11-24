@@ -1,12 +1,12 @@
+
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import API_URL from '../api'
 
 import familySuite from '../assets/rooms/family-suite.png'
 import barkadaRoom from '../assets/rooms/barkada-room.png'
 import coupleRoom from '../assets/rooms/couple-room.png'
 import deluxeRoom from '../assets/rooms/deluxe-room.png'
-
-const API_URL = 'http://localhost:5000/api/bookings'
 
 const roomImages = {
   'Family Suite': familySuite,
@@ -107,7 +107,7 @@ export default function MyBookingsPage() {
       setLoading(true)
       setError('')
 
-      const response = await fetch(`${API_URL}/my-bookings`, {
+      const response = await fetch(`${API_URL}/bookings/my-bookings`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -167,7 +167,7 @@ export default function MyBookingsPage() {
       setError('')
 
       const response = await fetch(
-        `${API_URL}/${bookingId}/cancel`,
+        `${API_URL}/bookings/${bookingId}/cancel`,
         {
           method: 'PUT',
           headers: {

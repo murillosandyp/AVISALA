@@ -1,8 +1,8 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import API_URL from '../api'
 
-const API_URL = 'http://localhost:5000/api/users'
 const MAX_PHOTO_SIZE = 2 * 1024 * 1024
 
 type Profile = {
@@ -32,7 +32,7 @@ export default function ProfilePage() {
 
   const fetchProfile = async () => {
     try {
-      const response = await fetch(`${API_URL}/profile`, {
+      const response = await fetch(`${API_URL}/users/profile`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -121,7 +121,7 @@ export default function ProfilePage() {
     setMessage('')
 
     try {
-      const response = await fetch(`${API_URL}/profile`, {
+      const response = await fetch(`${API_URL}/users/profile`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

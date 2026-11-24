@@ -1,6 +1,7 @@
 
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import API_URL from '../api'
 
 function PaymentPage() {
   const location = useLocation()
@@ -64,7 +65,7 @@ function PaymentPage() {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/bookings/${bookingId}/payment`,
+        `${API_URL}/bookings/${bookingId}/payment`,
         {
           method: 'POST',
           headers: {

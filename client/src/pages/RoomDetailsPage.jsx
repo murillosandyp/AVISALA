@@ -1,6 +1,7 @@
 
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import API_URL from '../api'
 
 import familySuite from '../assets/rooms/family-suite.png'
 import barkadaRoom from '../assets/rooms/barkada-room.png'
@@ -48,9 +49,7 @@ export default function RoomDetailsPage() {
   useEffect(() => {
     const fetchRoom = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:5000/api/rooms/${id}`
-        )
+        const response = await fetch(`${API_URL}/rooms/${id}`)
 
         const data = await response.json()
 
@@ -145,7 +144,7 @@ export default function RoomDetailsPage() {
     setSubmitting(true)
 
     try {
-      const response = await fetch('http://localhost:5000/api/bookings', {
+      const response = await fetch(`${API_URL}/bookings`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
