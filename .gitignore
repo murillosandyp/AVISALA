@@ -41,3 +41,13 @@ yarn-error.log*
 next-env.d.ts
 
 /lib/generated/prisma
+
+# Vite and Express project
+node_modules/
+client/node_modules/
+server/node_modules/
+client/dist/
+
+# Allow safe environment examples
+!.env.example
+!**/.env.example
