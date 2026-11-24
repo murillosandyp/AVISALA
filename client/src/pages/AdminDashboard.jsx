@@ -1,13 +1,12 @@
 
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import API_URL from '../api'
 
 import familySuite from '../assets/rooms/family-suite.png'
 import barkadaRoom from '../assets/rooms/barkada-room.png'
 import coupleRoom from '../assets/rooms/couple-room.png'
 import deluxeRoom from '../assets/rooms/deluxe-room.png'
-
-const API_URL = 'http://localhost:5000/api'
 
 const emptyRoom = {
   name: '',

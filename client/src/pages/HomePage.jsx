@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import '../App.css'
 
+import API_URL from '../api'
+
 import familySuite from '../assets/rooms/family-suite.png'
 import barkadaRoom from '../assets/rooms/barkada-room.png'
 import coupleRoom from '../assets/rooms/couple-room.png'
@@ -38,7 +40,7 @@ export default function HomePage() {
 
     const fetchRooms = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/rooms')
+        const response = await fetch(`${API_URL}/rooms`)
         const data = await response.json().catch(() => ({}))
 
         if (!response.ok) {
