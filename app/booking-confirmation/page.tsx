@@ -1,7 +1,8 @@
+
 'use client'
 
 import { useSearchParams, useRouter } from 'next/navigation'
-import { Suspense } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 
 function BookingConfirmationContent() {
   const searchParams = useSearchParams()
@@ -14,6 +15,41 @@ function BookingConfirmationContent() {
   const checkOut = searchParams.get('checkOut')
   const guests = searchParams.get('guests')
   const total = searchParams.get('total')
+
+  const [status, setStatus] = useState<string | null>(null)
+
+  // Fetch the actual booking status from the database
+  useEffect(() => {
+    if (!bookingRef) return
+
+    let active = true
+
+    const fetchStatus = async () => {
+      try {
+        const res = await fetch(
+          `/api/bookings/by-reference?ref=${encodeURIComponent(bookingRef)}&t=${Date.now()}`,
+          { cache: 'no-store' }
+        )
+
+        const data = await res.json()
+
+        if (active && data.success) {
+          setStatus(data.booking.status)
+        }
+      } catch (error) {
+        console.error('Failed to fetch booking status:', error)
+      }
+    }
+
+    fetchStatus()
+
+    const interval = setInterval(fetchStatus, 10000)
+
+    return () => {
+      active = false
+      clearInterval(interval)
+    }
+  }, [bookingRef])
 
   const formatDate = (date: string | null) => {
     if (!date) return 'Not specified'
@@ -36,6 +72,51 @@ function BookingConfirmationContent() {
           )
         )
       : 0
+
+  const statusInfo: Record<
+    string,
+    { title: string; message: string; color: string }
+  > = {
+    PENDING: {
+      title: 'Pending Confirmation',
+      message:
+        'Your reservation is currently pending. Please wait for confirmation from Mi Casa De Cagsawa.',
+      color: 'border-[#E8D7A8] bg-[#FFF8E8] text-[#785A20]',
+    },
+    CONFIRMED: {
+      title: 'Booking Confirmed!',
+      message:
+        'Great news! Your reservation has been confirmed by management. We look forward to welcoming you to Mi Casa De Cagsawa.',
+      color: 'border-[#B9D5A9] bg-[#EEF6E9] text-[#456B32]',
+    },
+    CHECKED_IN: {
+      title: 'Checked In',
+      message: 'Your reservation is currently marked as checked in.',
+      color: 'border-[#B9D5A9] bg-[#EEF6E9] text-[#456B32]',
+    },
+    CHECKED_OUT: {
+      title: 'Checked Out',
+      message: 'Your reservation has been marked as checked out.',
+      color: 'border-gray-200 bg-gray-50 text-gray-700',
+    },
+    CANCELLED: {
+      title: 'Booking Cancelled',
+      message: 'Your reservation has been cancelled.',
+      color: 'border-red-200 bg-red-50 text-red-700',
+    },
+    NO_SHOW: {
+      title: 'No Show',
+      message: 'Your reservation has been marked as no show.',
+      color: 'border-gray-200 bg-gray-50 text-gray-700',
+    },
+    REFUNDED: {
+      title: 'Refunded',
+      message: 'Your booking has been marked as refunded.',
+      color: 'border-gray-200 bg-gray-50 text-gray-700',
+    },
+  }
+
+  const currentStatus = status ? statusInfo[status] : null
 
   return (
     <main className="min-h-screen bg-[#F9F7F0] px-4 py-10 sm:px-8">
@@ -69,7 +150,7 @@ function BookingConfirmationContent() {
 
           <p className="mx-auto mt-3 max-w-lg text-sm leading-7 text-gray-600">
             Thank you for choosing Mi Casa De Cagsawa. Your booking request
-            has been received and is waiting for confirmation.
+            has been received.
           </p>
         </div>
 
@@ -107,15 +188,8 @@ function BookingConfirmationContent() {
             <Detail label="Room" value={room} />
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <Detail
-                label="Check-in"
-                value={formatDate(checkIn)}
-              />
-
-              <Detail
-                label="Check-out"
-                value={formatDate(checkOut)}
-              />
+              <Detail label="Check-in" value={formatDate(checkIn)} />
+              <Detail label="Check-out" value={formatDate(checkOut)} />
             </div>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -145,19 +219,31 @@ function BookingConfirmationContent() {
           </div>
         </div>
 
-        {/* Pending Status */}
-        <div className="mt-6 rounded-xl border border-[#E8D7A8] bg-[#FFF8E8] p-4">
+        {/* Dynamic Booking Status */}
+        <div
+          className={`mt-6 rounded-xl border p-4 ${
+            currentStatus?.color ||
+            'border-[#E4DED2] bg-white text-[#183B20]'
+          }`}
+        >
           <div className="flex gap-3">
-            <div className="mt-1 h-3 w-3 shrink-0 rounded-full bg-[#D9A441]" />
+            <div className="mt-1 h-3 w-3 shrink-0 rounded-full bg-current" />
 
             <div>
-              <h3 className="font-semibold text-[#785A20]">
-                Pending Confirmation
+              <h3 className="font-semibold">
+                {currentStatus?.title ||
+                  (status ? status.replace(/_/g, ' ') : 'Checking Booking Status...')}
               </h3>
 
-              <p className="mt-1 text-sm leading-6 text-[#8A713E]">
-                Your reservation is currently pending. Please wait for
-                confirmation from Mi Casa De Cagsawa before finalizing your stay.
+              <p className="mt-1 text-sm leading-6">
+                {currentStatus?.message ||
+                  (status
+                    ? 'Your booking status has been updated.'
+                    : 'Please wait while we retrieve your booking status.')}
+              </p>
+
+              <p className="mt-2 text-xs opacity-70">
+                Status updates automatically every 10 seconds.
               </p>
             </div>
           </div>

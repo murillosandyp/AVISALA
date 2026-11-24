@@ -15,33 +15,38 @@ export default function TabsLayout() {
           paddingBottom: 20,
           paddingTop: 8,
         },
-        tabBarLabelStyle: { fontSize: 11, fontWeight: '600' },
+        tabBarLabelStyle: {
+          fontSize: 11,
+          fontWeight: '600',
+        },
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
           title: 'Rooms',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home-outline" size={size} color={color} />
+          tabBarIcon: (props) => (
+            <Ionicons name="home-outline" size={props.size} color="#628B35" />
           ),
         }}
       />
+
       <Tabs.Screen
         name="bookings"
         options={{
           title: 'Bookings',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="calendar-outline" size={size} color={color} />
+          tabBarIcon: (props) => (
+            <Ionicons name="calendar-outline" size={props.size} color="#628B35" />
           ),
         }}
       />
+
       <Tabs.Screen
         name="profile"
         options={{
           title: 'Profile',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="person-outline" size={size} color={color} />
+          tabBarIcon: (props) => (
+            <Ionicons name="person-outline" size={props.size} color="#628B35" />
           ),
         }}
       />
