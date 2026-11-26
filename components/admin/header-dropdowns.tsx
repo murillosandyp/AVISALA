@@ -1,4 +1,5 @@
-﻿'use client'
+
+'use client'
 
 import type { LucideIcon } from 'lucide-react'
 import { useState } from 'react'
@@ -8,13 +9,13 @@ import {
   Bell,
   MessageSquare,
   User,
-  Check,
   CheckCheck,
   Clock,
   Calendar,
   Wallet,
   Send,
 } from 'lucide-react'
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,6 +23,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+
 import {
   markNotificationRead,
   markAllNotificationsRead,
@@ -46,11 +48,15 @@ function timeAgo(date: Date) {
   const now = new Date()
   const d = new Date(date)
   const seconds = Math.floor((now.getTime() - d.getTime()) / 1000)
+
   if (seconds < 60) return 'just now'
+
   const minutes = Math.floor(seconds / 60)
   if (minutes < 60) return `${minutes}m ago`
+
   const hours = Math.floor(minutes / 60)
   if (hours < 24) return `${hours}h ago`
+
   const days = Math.floor(hours / 24)
   return `${days}d ago`
 }
@@ -62,18 +68,25 @@ export function NotificationsDropdown({
 }) {
   const [items, setItems] = useState(notifications)
   const router = useRouter()
+
   const unreadCount = items.filter((n) => !n.isRead).length
 
   async function handleMarkRead(id: string) {
     setItems((prev) =>
-      prev.map((n) => (n.id === id ? { ...n, isRead: true } : n))
+      prev.map((n) =>
+        n.id === id ? { ...n, isRead: true } : n
+      )
     )
+
     await markNotificationRead(id)
     router.refresh()
   }
 
   async function handleMarkAllRead() {
-    setItems((prev) => prev.map((n) => ({ ...n, isRead: true })))
+    setItems((prev) =>
+      prev.map((n) => ({ ...n, isRead: true }))
+    )
+
     await markAllNotificationsRead()
     router.refresh()
   }
@@ -85,15 +98,21 @@ export function NotificationsDropdown({
         className="p-2 rounded-md hover:bg-[#E2DBD0]/60 focus:outline-none focus:ring-2 focus:ring-[#628B35] relative"
       >
         <Bell className="w-5 h-5 text-[#103713]" />
+
         {unreadCount > 0 && (
           <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
         )}
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-80 max-h-[400px] overflow-y-auto">
+
+      <DropdownMenuContent
+        align="end"
+        className="w-80 max-h-[400px] overflow-y-auto"
+      >
         <div className="flex items-center justify-between px-3 py-2 border-b border-[#E2DBD0]">
           <span className="text-sm font-semibold text-[#103713]">
             Notifications
           </span>
+
           {unreadCount > 0 && (
             <button
               type="button"
@@ -113,18 +132,22 @@ export function NotificationsDropdown({
         ) : (
           items.map((n) => {
             const Icon = ICON_BY_TYPE[n.type] || Bell
+
             return (
               <DropdownMenuItem
                 key={n.id}
                 className={`p-3 cursor-pointer ${
                   !n.isRead ? 'bg-[#E2DBD0]/30' : ''
                 }`}
-                onClick={() => !n.isRead && handleMarkRead(n.id)}
+                onClick={() =>
+                  !n.isRead && handleMarkRead(n.id)
+                }
               >
                 <div className="flex items-start gap-2 w-full">
                   <div className="w-7 h-7 rounded-full bg-[#628B35]/15 flex items-center justify-center flex-shrink-0 mt-0.5">
                     <Icon className="w-3.5 h-3.5 text-[#628B35]" />
                   </div>
+
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-2">
                       <p
@@ -136,13 +159,16 @@ export function NotificationsDropdown({
                       >
                         {n.title}
                       </p>
+
                       {!n.isRead && (
                         <span className="w-2 h-2 rounded-full bg-[#628B35] flex-shrink-0 mt-1" />
                       )}
                     </div>
+
                     <p className="text-xs text-[#103713]/60 line-clamp-2 mt-0.5">
                       {n.message}
                     </p>
+
                     <p className="text-[10px] text-[#103713]/40 mt-1 flex items-center gap-1">
                       <Clock className="w-2.5 h-2.5" />
                       {timeAgo(n.createdAt)}
@@ -196,11 +222,16 @@ export function MessagesDropdown() {
         className="p-2 rounded-md hover:bg-[#E2DBD0]/60 focus:outline-none focus:ring-2 focus:ring-[#628B35] relative"
       >
         <MessageSquare className="w-5 h-5 text-[#103713]" />
+
         {unreadCount > 0 && (
           <span className="absolute top-1 right-1 w-2 h-2 bg-[#628B35] rounded-full" />
         )}
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-80 max-h-[400px] overflow-y-auto">
+
+      <DropdownMenuContent
+        align="end"
+        className="w-80 max-h-[400px] overflow-y-auto"
+      >
         <div className="px-3 py-2 border-b border-[#E2DBD0]">
           <span className="text-sm font-semibold text-[#103713]">
             Messages
@@ -210,12 +241,15 @@ export function MessagesDropdown() {
         {messages.map((m) => (
           <DropdownMenuItem
             key={m.id}
-            className={`p-3 cursor-pointer ${m.unread ? 'bg-[#E2DBD0]/30' : ''}`}
+            className={`p-3 cursor-pointer ${
+              m.unread ? 'bg-[#E2DBD0]/30' : ''
+            }`}
           >
             <div className="flex items-start gap-3 w-full">
               <div className="w-9 h-9 rounded-full bg-[#103713] text-[#FFFDF5] flex items-center justify-center text-xs font-bold flex-shrink-0">
                 {m.avatar}
               </div>
+
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between gap-2">
                   <p
@@ -227,10 +261,12 @@ export function MessagesDropdown() {
                   >
                     {m.name}
                   </p>
+
                   <span className="text-[10px] text-[#103713]/40 flex-shrink-0">
                     {m.time}
                   </span>
                 </div>
+
                 <p className="text-xs text-[#103713]/60 line-clamp-1 mt-0.5">
                   {m.preview}
                 </p>
@@ -240,6 +276,7 @@ export function MessagesDropdown() {
         ))}
 
         <DropdownMenuSeparator />
+
         <div className="p-2">
           <button
             type="button"
@@ -293,5 +330,3 @@ export function ProfileDropdown() {
     </DropdownMenu>
   )
 }
-
-

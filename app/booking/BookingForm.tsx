@@ -13,6 +13,8 @@ type Room = {
   category: string
 }
 
+type PaymentMethod = 'GCASH' | 'MARIBANK'
+
 export default function BookingForm({
   rooms,
   selectedRoomId,
@@ -31,8 +33,14 @@ export default function BookingForm({
   const [guestCount, setGuestCount] = useState('1')
   const [notes, setNotes] = useState('')
   const [loading, setLoading] = useState(false)
+  const [paymentLoading, setPaymentLoading] = useState(false)
   const [error, setError] = useState('')
+  const [paymentError, setPaymentError] = useState('')
   const [bookingRef, setBookingRef] = useState('')
+  const [paymentRef, setPaymentRef] = useState('')
+  const [paymentSubmitted, setPaymentSubmitted] = useState(false)
+  const [paymentMethod, setPaymentMethod] =
+    useState<PaymentMethod>('GCASH')
 
   const selectedRoom = rooms.find((room) => room.id === roomId)
 
@@ -54,10 +62,14 @@ export default function BookingForm({
     ? selectedRoom.basePrice * nights
     : 0
 
+  const depositAmount = 1000
+
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setError('')
     setBookingRef('')
+    setPaymentSubmitted(false)
+    setPaymentRef('')
 
     if (!selectedRoom) {
       setError('Please select a room.')
@@ -119,10 +131,55 @@ export default function BookingForm({
     }
   }
 
+  async function handlePaymentSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    setPaymentError('')
+
+    if (!bookingRef || !paymentRef.trim()) {
+      setPaymentError('Please enter your payment reference number.')
+      return
+    }
+
+    setPaymentLoading(true)
+
+    try {
+      const response = await fetch('/api/bookings/by-reference', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          bookingRef,
+          paymentRef: paymentRef.trim(),
+          paymentMethod,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(
+          data.message || data.error || 'Payment submission failed.'
+        )
+      }
+
+      setPaymentSubmitted(true)
+    } catch (err) {
+      setPaymentError(
+        err instanceof Error
+          ? err.message
+          : 'Unable to submit payment reference.'
+      )
+    } finally {
+      setPaymentLoading(false)
+    }
+  }
+
+  // BOOKING CONFIRMATION AND PAYMENT
   if (bookingRef) {
     return (
-      <div className="mx-auto max-w-xl rounded-3xl border border-[#E2DBD0] bg-white p-8 text-center shadow-sm">
-        <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-[#103713] text-3xl text-white">
+      <div className="mx-auto max-w-xl rounded-3xl border border-[#E2DBD0] bg-white p-6 shadow-sm md:p-8">
+        <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-[#103713] text-3xl text-white">
           ✓
         </div>
 
@@ -131,9 +188,8 @@ export default function BookingForm({
         </h2>
 
         <p className="mb-5 text-gray-600">
-          Thank you for choosing Mi Casa De Cagsawa. Your
-          reservation request has been submitted and is pending
-          confirmation.
+          Thank you for choosing Mi Casa De Cagsawa. Your booking
+          request has been submitted.
         </p>
 
         <div className="mb-6 rounded-2xl bg-[#FFFDF5] p-5">
@@ -141,15 +197,181 @@ export default function BookingForm({
           <p className="mt-1 text-2xl font-bold text-[#103713]">
             {bookingRef}
           </p>
+
+          <div className="mt-4 border-t border-[#E2DBD0] pt-4">
+            <p className="text-sm text-gray-600">Room</p>
+            <p className="font-semibold text-[#103713]">
+              {selectedRoom?.name} - Room {selectedRoom?.roomNumber}
+            </p>
+
+            <p className="mt-3 text-sm text-gray-600">Booking Total</p>
+            <p className="text-lg font-semibold text-[#103713]">
+              ₱{totalPrice.toLocaleString()}
+            </p>
+
+            <p className="mt-3 text-sm text-gray-600">Required Deposit</p>
+            <p className="text-2xl font-bold text-[#628B35]">
+              ₱{depositAmount.toLocaleString()}
+            </p>
+          </div>
         </div>
 
-        <p className="mb-6 text-sm text-gray-500">
-          Please keep your booking reference for future inquiries.
-        </p>
+        {!paymentSubmitted ? (
+          <form onSubmit={handlePaymentSubmit}>
+            <div className="mb-5 rounded-2xl border border-[#E2DBD0] p-5">
+              <h3 className="mb-3 text-lg font-semibold text-[#103713]">
+                Deposit Payment
+              </h3>
+
+              <p className="text-sm text-gray-600">
+                Please submit your required deposit of ₱
+                {depositAmount.toLocaleString()} and provide your
+                payment reference below.
+              </p>
+
+              {/* PAYMENT METHOD SELECTOR */}
+              <p className="mb-3 mt-5 text-sm font-medium text-[#103713]">
+                Select Payment Method
+              </p>
+
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setPaymentMethod('GCASH')
+                    setPaymentError('')
+                  }}
+                  className={`rounded-xl border-2 p-4 text-center transition ${
+                    paymentMethod === 'GCASH'
+                      ? 'border-[#628B35] bg-[#FFFDF5]'
+                      : 'border-[#E2DBD0] bg-white hover:border-[#628B35]'
+                  }`}
+                >
+                  <span className="block font-semibold text-[#103713]">
+                    GCash
+                  </span>
+                  <span className="mt-1 block text-xs text-gray-500">
+                    E-wallet
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setPaymentMethod('MARIBANK')
+                    setPaymentError('')
+                  }}
+                  className={`rounded-xl border-2 p-4 text-center transition ${
+                    paymentMethod === 'MARIBANK'
+                      ? 'border-[#628B35] bg-[#FFFDF5]'
+                      : 'border-[#E2DBD0] bg-white hover:border-[#628B35]'
+                  }`}
+                >
+                  <span className="block font-semibold text-[#103713]">
+                    MariBank
+                  </span>
+                  <span className="mt-1 block text-xs text-gray-500">
+                    Bank / E-wallet
+                  </span>
+                </button>
+              </div>
+
+              {/* PAYMENT INSTRUCTIONS */}
+              <div className="mt-4 rounded-xl bg-[#FFFDF5] p-4">
+                <p className="text-sm font-semibold text-[#103713]">
+                  {paymentMethod === 'GCASH'
+                    ? 'GCash Payment'
+                    : 'MariBank Payment'}
+                </p>
+
+                <p className="mt-2 text-sm text-gray-600">
+                  {paymentMethod === 'GCASH'
+                    ? 'Send your deposit using the official Mi Casa De Cagsawa GCash payment details. Make sure to verify the recipient before completing your payment.'
+                    : 'Send your deposit using the official Mi Casa De Cagsawa MariBank payment details. Make sure to verify the recipient before completing your payment.'}
+                </p>
+
+                <p className="mt-3 text-sm font-medium text-[#103713]">
+                  Deposit Amount: ₱
+                  {depositAmount.toLocaleString()}
+                </p>
+              </div>
+
+              <label className="mb-2 mt-5 block text-sm font-medium text-[#103713]">
+                {paymentMethod === 'GCASH'
+                  ? 'GCash Reference Number'
+                  : 'MariBank Reference Number'}
+              </label>
+
+              <input
+                required
+                value={paymentRef}
+                onChange={(e) => setPaymentRef(e.target.value)}
+                placeholder="Enter your payment reference number"
+                className="w-full rounded-xl border border-[#E2DBD0] px-4 py-3 outline-none focus:border-[#628B35]"
+              />
+
+              <p className="mt-2 text-xs text-gray-500">
+                Enter the reference number from your completed payment.
+              </p>
+            </div>
+
+            {paymentError && (
+              <div className="mb-4 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+                {paymentError}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={paymentLoading || !paymentRef.trim()}
+              className="w-full rounded-full bg-[#628B35] px-6 py-4 font-medium text-white transition hover:bg-[#103713] disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {paymentLoading
+                ? 'Submitting Payment Reference...'
+                : 'Submit Payment Reference'}
+            </button>
+          </form>
+        ) : (
+          <div className="rounded-2xl border border-[#E2DBD0] bg-[#FFFDF5] p-5">
+            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-[#628B35] text-xl text-white">
+              ✓
+            </div>
+
+            <h3 className="text-lg font-semibold text-[#103713]">
+              Payment Submitted!
+            </h3>
+
+            <p className="mt-2 text-sm text-gray-600">
+              Your payment reference has been sent successfully.
+              Please wait while the admin verifies your payment.
+            </p>
+
+            <div className="mt-4 rounded-xl bg-white p-4">
+              <p className="text-sm text-gray-500">Payment Method</p>
+              <p className="mt-1 font-semibold text-[#103713]">
+                {paymentMethod === 'GCASH' ? 'GCash' : 'MariBank'}
+              </p>
+
+              <p className="mt-3 text-sm text-gray-500">
+                Submitted Reference
+              </p>
+              <p className="mt-1 font-semibold text-[#103713]">
+                {paymentRef}
+              </p>
+
+              <p className="mt-3 text-sm text-gray-500">
+                Payment Status
+              </p>
+              <p className="font-semibold text-amber-700">
+                Pending Verification
+              </p>
+            </div>
+          </div>
+        )}
 
         <button
           onClick={() => router.push('/')}
-          className="rounded-full bg-[#103713] px-7 py-3 text-white transition hover:bg-[#628B35]"
+          className="mt-5 w-full rounded-full border border-[#E2DBD0] px-7 py-3 text-[#103713] transition hover:bg-[#FFFDF5]"
         >
           Back to Home
         </button>
@@ -157,6 +379,7 @@ export default function BookingForm({
     )
   }
 
+  // BOOKING FORM
   return (
     <form
       onSubmit={handleSubmit}
@@ -236,7 +459,7 @@ export default function BookingForm({
             <option value="">Choose a room</option>
             {rooms.map((room) => (
               <option key={room.id} value={room.id}>
-                Room {room.roomNumber} — {room.name} (₱
+                Room {room.roomNumber} - {room.name} (₱
                 {room.basePrice.toLocaleString()} / night)
               </option>
             ))}
@@ -331,7 +554,9 @@ export default function BookingForm({
       {nights > 0 && selectedRoom && (
         <div className="mt-6 rounded-2xl bg-[#103713] p-5 text-white">
           <div className="flex justify-between text-sm text-white/80">
-            <span>{nights} {nights === 1 ? 'night' : 'nights'}</span>
+            <span>
+              {nights} {nights === 1 ? 'night' : 'nights'}
+            </span>
             <span>
               ₱{selectedRoom.basePrice.toLocaleString()} × {nights}
             </span>
@@ -341,6 +566,10 @@ export default function BookingForm({
             <span className="text-2xl font-semibold">
               ₱{totalPrice.toLocaleString()}
             </span>
+          </div>
+          <div className="mt-3 flex items-center justify-between text-sm text-white/80">
+            <span>Required Deposit</span>
+            <span>₱{depositAmount.toLocaleString()}</span>
           </div>
         </div>
       )}

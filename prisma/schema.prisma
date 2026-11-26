@@ -1,3 +1,4 @@
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -9,11 +10,11 @@ datasource db {
 
 model AdminUser {
   id           String   @id @default(cuid())
-  email        String   @unique
-  passwordHash String
-  fullName     String
-  role         String   @default("ADMIN")
-  createdAt    DateTime @default(now())
+  email         String   @unique
+  passwordHash  String
+  fullName      String
+  role          String   @default("ADMIN")
+  createdAt     DateTime @default(now())
 }
 
 model Room {
@@ -50,6 +51,7 @@ model Reservation {
   status        String    @default("PENDING")
   paymentStatus String    @default("UNPAID")
   paymentRef    String?
+  paymentMethod String?
   totalPrice    Float
   depositPaid   Boolean   @default(false)
   depositAmount Float     @default(1000)
