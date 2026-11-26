@@ -1,6 +1,7 @@
-'use server'
+﻿'use server'
 
 import { prisma } from '@/mi-casa-mobile/lib/prisma'
+import type { Prisma } from '@prisma/client'
 import { revalidatePath } from 'next/cache'
 
 const VALID_STATUSES = [
@@ -14,12 +15,12 @@ const VALID_STATUSES = [
 ] as const
 
 export async function updateBookingStatus(id: string, status: string) {
-  if (!VALID_STATUSES.includes(status as any)) {
+  if (!(VALID_STATUSES as readonly string[]).includes(status)) {
     return { success: false, message: 'Invalid status' }
   }
 
   try {
-    const data: any = { status }
+    const data: Prisma.ReservationUpdateInput = { status }
 
     // Auto-update payment status when refunded
     if (status === 'REFUNDED') {

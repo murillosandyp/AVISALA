@@ -1,6 +1,7 @@
-'use client'
+﻿'use client'
 
 import { NewBookingDialog } from './new-booking-dialog'
+import type { LucideIcon } from 'lucide-react'
 import { useState } from 'react'
 import { Badge } from '@/components/ui/badge'
 import {
@@ -48,7 +49,7 @@ type Booking = {
 
 const STATUS_META: Record<
   string,
-  { label: string; icon: any; className: string }
+  { label: string; icon: LucideIcon; className: string }
 > = {
   PENDING: {
     label: 'PENDING',
@@ -141,7 +142,7 @@ export function BookingsTable({
       <div className="p-4 flex flex-wrap items-center gap-3 border-b border-[#E2DBD0]">
         <input
           type="search"
-          placeholder="Search by guest or booking ref…"
+          placeholder="Search by guest or booking refâ€¦"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="px-3 py-2 border border-[#E2DBD0] rounded-md text-sm w-72 bg-[#FFFDF5] text-[#103713] focus:outline-none focus:ring-2 focus:ring-[#628B35] placeholder:text-[#103713]/40"
@@ -204,7 +205,7 @@ export function BookingsTable({
                 </div>
                 <div className="text-xs text-[#103713]/60">
                   {b.guestCount} guest{b.guestCount !== 1 ? 's' : ''}
-                  {b.guestGender ? ` • ${b.guestGender}` : ''}
+                  {b.guestGender ? ` â€¢ ${b.guestGender}` : ''}
                 </div>
               </TableCell>
               <TableCell className="text-sm text-[#103713]">
@@ -212,10 +213,10 @@ export function BookingsTable({
               </TableCell>
               <TableCell className="text-xs text-[#103713]/70">
                 {formatDate(b.checkIn)}
-                <br />→ {formatDate(b.checkOut)}
+                <br />â†’ {formatDate(b.checkOut)}
               </TableCell>
               <TableCell className="text-[#103713]">
-                ₱{b.totalPrice.toLocaleString()}
+                â‚±{b.totalPrice.toLocaleString()}
               </TableCell>
               <TableCell>
                 <StatusBadge status={b.status} />

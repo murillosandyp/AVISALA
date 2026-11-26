@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import API_URL from '../api'
+import AvailabilityCalendar from '../components/AvailabilityCalendar'
 
 import familySuite from '../assets/rooms/family-suite.png'
 import barkadaRoom from '../assets/rooms/barkada-room.png'
@@ -35,6 +36,8 @@ export default function RoomDetailsPage() {
   const navigate = useNavigate()
 
   const [room, setRoom] = useState(null)
+  const [bookedDates, setBookedDates] = useState([])
+  const [availabilityLoading, setAvailabilityLoading] = useState(false)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
@@ -68,6 +71,31 @@ export default function RoomDetailsPage() {
     fetchRoom()
   }, [id])
 
+  useEffect(() => {
+    if (!id) return
+
+    const fetchAvailability = async () => {
+      setAvailabilityLoading(true)
+
+      try {
+        const response = await fetch(`${API_URL}/bookings/availability/${id}`)
+        const data = await response.json()
+
+        if (!response.ok) {
+          throw new Error(data.message || 'Failed to load availability.')
+        }
+
+        setBookedDates(data.bookedDates || [])
+      } catch (err) {
+        console.error('Availability loading error:', err)
+        setBookedDates([])
+      } finally {
+        setAvailabilityLoading(false)
+      }
+    }
+
+    fetchAvailability()
+  }, [id])
   const nights =
     checkIn && checkOut
       ? Math.round(
@@ -519,36 +547,32 @@ export default function RoomDetailsPage() {
                       Your Booking
                     </h3>
 
-                    {/* CHECK-IN */}
-                    <div className="mb-4">
+                    {/* AVAILABILITY CALENDAR */}
+                    <div className="mb-5">
                       <label className="mb-2 block text-sm font-medium text-[#46513E]">
-                        Check-in Date
+                        Select Your Stay
                       </label>
 
-                      <input
-                        type="date"
-                        min={getToday()}
-                        value={checkIn}
-                        onChange={(e) => handleCheckIn(e.target.value)}
-                        className="w-full rounded-xl border border-[#DEDCCF] bg-white p-3 text-sm outline-none transition focus:border-[#4A7A24] focus:ring-1 focus:ring-[#4A7A24]"
-                      />
+                      {availabilityLoading ? (
+                        <p className="py-4 text-sm text-gray-500">
+                          Loading room availability...
+                        </p>
+                      ) : (
+                        <AvailabilityCalendar
+                          bookedDates={bookedDates}
+                          checkIn={checkIn}
+                          checkOut={checkOut}
+                          onCheckInChange={(date) => {
+                            setCheckIn(date)
+                            setBookingError('')
+                          }}
+                          onCheckOutChange={(date) => {
+                            setCheckOut(date)
+                            setBookingError('')
+                          }}
+                        />
+                      )}
                     </div>
-
-                    {/* CHECK-OUT */}
-                    <div className="mb-4">
-                      <label className="mb-2 block text-sm font-medium text-[#46513E]">
-                        Check-out Date
-                      </label>
-
-                      <input
-                        type="date"
-                        min={checkIn ? getNextDay(checkIn) : getToday()}
-                        value={checkOut}
-                        onChange={(e) => setCheckOut(e.target.value)}
-                        className="w-full rounded-xl border border-[#DEDCCF] bg-white p-3 text-sm outline-none transition focus:border-[#4A7A24] focus:ring-1 focus:ring-[#4A7A24]"
-                      />
-                    </div>
-
                     {/* GUESTS */}
                     <div className="mb-5">
                       <label className="mb-2 block text-sm font-medium text-[#46513E]">
@@ -679,3 +703,6 @@ export default function RoomDetailsPage() {
     </div>
   )
 }
+
+
+

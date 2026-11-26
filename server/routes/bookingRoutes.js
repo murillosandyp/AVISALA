@@ -7,6 +7,8 @@ const authMiddleware = require('../middleware/authMiddleware')
 const roleMiddleware = require('../middleware/roleMiddleware')
 
 // USER ROUTES
+router.get('/availability/:roomId', bookingController.getRoomAvailability)
+
 router.post('/', authMiddleware, bookingController.createBooking)
 
 router.get('/my-bookings', authMiddleware, bookingController.getMyBookings)
@@ -49,3 +51,4 @@ router.put(
 )
 
 module.exports = router
+

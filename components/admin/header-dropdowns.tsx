@@ -1,6 +1,7 @@
 
 'use client'
 
+import type { LucideIcon } from 'lucide-react'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { signOut } from 'next-auth/react'
@@ -37,7 +38,7 @@ type Notification = {
   createdAt: Date
 }
 
-const ICON_BY_TYPE: Record<string, any> = {
+const ICON_BY_TYPE: Record<string, LucideIcon> = {
   BOOKING: Calendar,
   PAYMENT: Wallet,
   SYSTEM: Bell,
