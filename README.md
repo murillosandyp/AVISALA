@@ -1,63 +1,135 @@
 # Mi Casa Express – Mi Casa De Cagsawa
 
-## About
+**Room Reservation and Accommodation Management System**
 
-Mi Casa Express is a room reservation system developed for Mi Casa De Cagsawa, a transient house accommodation. It allows customers to browse rooms, check availability, and make reservations. Administrators can manage rooms, bookings, and customer information through an admin dashboard.
+Mi Casa Express is a room reservation and management system developed for Mi Casa De Cagsawa, a transient house and accommodation business. The system allows customers to browse rooms, view room details, and make reservations, while administrators can manage rooms, bookings, and customer information through an admin dashboard.
 
-## Features
+The project aims to make room reservation and accommodation management more convenient, organized, and accessible.
 
+---
+
+## Project Features
+
+### Customer Side
 - User registration and login
-- Room browsing and room details
-- Room availability calendar
-- Booking and reservation management
+- Browse available rooms
+- View room details, prices, capacity, and amenities
+- Room reservation
+- View and manage bookings
 - Customer profile management
+
+### Admin Side
 - Admin dashboard
-- Room management (CRUD)
-- Booking status management
+- Room management (Create, Read, Update, Delete)
+- Booking management
+- Customer management
+- View booking details
+- Manage booking status
+- Monitor room availability
+
+---
 
 ## Technologies Used
 
-- Next.js, React.js, Vite
-- Tailwind CSS
-- Node.js and Express.js
-- MongoDB and Mongoose
-- Prisma
-- JWT and bcryptjs
-- Git and GitHub
+| Technology | Purpose |
+|---|---|
+| React | Frontend user interface |
+| Next.js | Web application framework |
+| Node.js | Server-side runtime |
+| Express.js | Backend API |
+| MongoDB | Database |
+| Prisma | Database ORM |
+| JavaScript | Application programming |
+| TypeScript | Type-safe development |
+| Tailwind CSS | UI styling |
+| JWT | Authentication |
+| Git & GitHub | Version control and collaboration |
+
+---
 
 ## Group Members
 
-| Member | Role |
-|---|---|
-| Sandy Murillo | Backend Developer |
-| Dona | Frontend Developer |
-| Abby | Project Manager |
-| Eunice | Database Administrator |
-| Liza | QA / Tester |
+| Member | Role | Responsibility |
+|---|---|---|
+| Sandy P. Murillo | Backend Developer | Backend logic, API, and system functionality |
+| Dona | Frontend Developer | User interface and frontend implementation |
+| Abby | Project Manager | Project coordination and monitoring |
+| Eunice | Database Administrator | Database organization and management |
+| Liza | Quality Assurance / Tester | Testing, identifying errors, and checking system functionality |
 
-## Installation and Setup
+---
 
-### Prerequisites
+## Project Structure
 
-- Node.js and npm
-- Git
-- MongoDB database
+The repository contains the system's different components and supporting files.
 
-### 1. Clone the repository
+- `app/` – Next.js application routes and features
+- `client/` – Customer-facing frontend
+- `server/` – Backend API, controllers, models, and routes
+- `mi-casa-mobile/` – Mobile application components
+- `components/` – Reusable UI components
+- `lib/` – Utilities and shared configurations
+- `prisma/` – Database schema and related files, if applicable
+
+---
+
+## Requirements
+
+Before installing the project on another computer, make sure the following are installed:
+
+- [Node.js](https://nodejs.org/)
+- [Git](https://git-scm.com/)
+- [Visual Studio Code](https://code.visualstudio.com/) (recommended)
+- MongoDB Atlas account or a configured MongoDB database
+
+---
+
+## Installation Guide
+
+Follow these steps to copy the repository and run the project on another computer.
+
+### 1. Clone the Repository
+
+Open a terminal and run:
 
 ```bash
 git clone https://github.com/murillosandyp/AVISALA.git
+```
+
+Go to the project directory:
+
+```bash
 cd AVISALA
 ```
 
-### 2. Set up the backend
+### 2. Install Dependencies
+
+Install the dependencies for the frontend:
 
 ```bash
-cd server
+cd client
 npm install
 ```
 
-Create a `.env` file inside the `server` folder:
+Install the dependencies for the backend:
+
+```bash
+cd ../server
+npm install
+```
+
+If you are also running the Next.js application located in the root directory, open another terminal in the project root and install its dependencies:
+
+```bash
+cd ..
+npm install
+```
+
+### 3. Configure Environment Variables
+
+The project requires environment variables for database connection and authentication. Create the necessary `.env` files in the appropriate directories.
+
+**Backend – `server/.env`**
 
 ```env
 PORT=5000
@@ -65,39 +137,101 @@ MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=your_secret_key
 ```
 
-### 3. Run the backend
+Replace the values with your own MongoDB connection string and secret key. Do not share your actual credentials.
+
+**Frontend – `client/.env`**
+
+```env
+VITE_API_URL=http://localhost:5000/api
+```
+
+Make sure the frontend API URL matches the address where the backend is running.
+
+If the Next.js application requires additional environment variables, configure them in the root `.env` file based on the project's authentication and database setup.
+
+> Environment files are not included in the repository for security reasons. Each user must create their own local configuration.
+
+### 4. Run the Backend Server
+
+Open a terminal:
 
 ```bash
+cd server
 npm run dev
 ```
 
-Backend address: `http://localhost:5000`
+The backend API should run at:
 
-### 4. Set up the frontend
+```text
+http://localhost:5000
+```
 
-Open another terminal from the project root:
+### 5. Run the Frontend
+
+Open another terminal:
 
 ```bash
 cd client
-npm install
 npm run dev
 ```
 
-Frontend address: `http://localhost:5173`
+Open the frontend URL displayed in the terminal, usually:
 
-## Access the System
+```text
+http://localhost:5173
+```
 
-| Component | URL |
-|---|---|
-| Customer Website | http://localhost:5173 |
-| Admin Dashboard | http://localhost:5173/admin |
-| Backend API | http://localhost:5000 |
+Keep both the backend and frontend terminals running while using the system.
 
-Both the frontend and backend must be running to use the system.
+### 6. Run the Next.js Application (If Needed)
 
-## Repository
+If you need to run the Next.js application from the root directory, open another terminal:
 
-GitHub: https://github.com/murillosandyp/AVISALA
+```bash
+npm run dev
+```
 
-**Course:** Frameworks & NoSQL Technology  
-**Developed by:** AVISALA
+Then open:
+
+```text
+http://localhost:3000
+```
+
+---
+
+## Database Configuration
+
+The system uses MongoDB for data storage.
+
+To connect the application to MongoDB:
+
+1. Create or access your MongoDB database.
+2. Obtain your MongoDB connection string.
+3. Add the connection string to your `server/.env` file.
+4. Make sure the database connection is properly configured.
+5. Start the backend server and verify the database connection.
+
+The application stores information related to users, rooms, and bookings.
+
+---
+
+## Important Notes
+
+- Make sure Node.js and npm are properly installed.
+- Make sure the database is accessible before running the application.
+- Start the backend server before using frontend features that require API access.
+- Do not upload `.env` files, passwords, tokens, or database credentials to GitHub.
+- When cloning the project to another computer, dependencies must be installed again using `npm install`.
+- Local development URLs use `localhost`, which is intended for the computer running the application.
+
+---
+
+## Project Purpose
+
+This project was developed as part of our Bachelor of Science in Information Systems program to apply our knowledge of web development, database management, backend and frontend development, system integration, and software testing.
+
+---
+
+**Mi Casa De Cagsawa**
+
+*Comfort Feels Like Home.*
