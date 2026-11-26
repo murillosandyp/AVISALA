@@ -1,4 +1,29 @@
 
+// GET ROOM AVAILABILITY (PUBLIC)
+exports.getRoomAvailability = async (req, res) => {
+  try {
+    const { roomId } = req.params
+
+    const bookings = await Booking.find({
+      room: roomId,
+      status: { $in: ['Pending', 'Confirmed'] }
+    }).select('checkIn checkOut status')
+
+    res.json({
+      success: true,
+      bookedDates: bookings.map((booking) => ({
+        checkIn: booking.checkIn,
+        checkOut: booking.checkOut,
+        status: booking.status
+      }))
+    })
+  } catch (error) {
+    res.status(500).json({
+      message: 'Failed to retrieve room availability.'
+    })
+  }
+}
+
 const Booking = require('../models/Booking')
 const Room = require('../models/Room')
 
@@ -365,3 +390,4 @@ exports.updateBookingStatus = async (req, res) => {
     })
   }
 }
+

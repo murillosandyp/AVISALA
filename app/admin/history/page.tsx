@@ -1,4 +1,5 @@
-import { prisma } from '@/mi-casa-mobile/lib/prisma'
+﻿import { prisma } from '@/mi-casa-mobile/lib/prisma'
+import type { Reservation } from '@prisma/client'
 import { Badge } from '@/components/ui/badge'
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
@@ -7,7 +8,9 @@ import {
 export const dynamic = 'force-dynamic'
 
 export default async function HistoryPage() {
-  const pastBookings = await prisma.reservation.findMany({
+  const pastBookings: (Reservation & {
+    room: { roomNumber: number }
+  })[] = await prisma.reservation.findMany({
     where: { status: { in: ['CHECKED_OUT', 'CANCELLED', 'NO_SHOW'] } },
     include: { room: true },
     orderBy: { checkOut: 'desc' },
@@ -82,3 +85,4 @@ export default async function HistoryPage() {
     </div>
   )
 }
+

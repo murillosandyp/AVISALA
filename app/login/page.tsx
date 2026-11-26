@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, Suspense } from 'react'
 import Image from 'next/image'
@@ -40,8 +40,8 @@ function LoginForm() {
       }
 
       setStep('mfa')
-    } catch (err: any) {
-      setError(err.message)
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'An unexpected error occurred.')
     } finally {
       setLoading(false)
     }
@@ -128,7 +128,7 @@ function LoginForm() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
+                placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
                 required
                 autoComplete="current-password"
                 className="border-[#E2DBD0] focus-visible:ring-[#628B35] text-[#103713]"
@@ -140,7 +140,7 @@ function LoginForm() {
               className="w-full bg-[#628B35] hover:bg-[#4f7029] text-[#FFFDF5] focus-visible:ring-[#103713]"
               disabled={loading}
             >
-              {loading ? 'Checking…' : 'Continue'}
+              {loading ? 'Checkingâ€¦' : 'Continue'}
             </Button>
 
             <p className="text-xs text-[#103713]/60 text-center mt-4">
@@ -187,7 +187,7 @@ function LoginForm() {
               className="w-full bg-[#628B35] hover:bg-[#4f7029] text-[#FFFDF5]"
               disabled={loading || mfaCode.length !== 6}
             >
-              {loading ? 'Signing in…' : 'Sign In'}
+              {loading ? 'Signing inâ€¦' : 'Sign In'}
             </Button>
 
             <Button
@@ -214,7 +214,7 @@ export default function LoginPage() {
     <Suspense
       fallback={
         <div className="min-h-screen flex items-center justify-center bg-[#FFFDF5] text-[#103713]">
-          Loading…
+          Loadingâ€¦
         </div>
       }
     >

@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
@@ -136,7 +136,7 @@ export function NewBookingDialog({ rooms }: { rooms: Room[] }) {
                 className="border-[#E2DBD0] focus-visible:ring-[#628B35] text-[#103713]"
               />
               <p className="text-xs text-[#103713]/60 mt-1">
-                Single field — enter your name as you'd like it displayed.
+                Single field â€” enter your name as you&apos;d like it displayed.
               </p>
             </div>
           </div>
@@ -168,7 +168,7 @@ export function NewBookingDialog({ rooms }: { rooms: Room[] }) {
               </SelectContent>
             </Select>
             <p className="text-xs text-[#103713]/60 mt-1">
-              Optional — used only for guest records.
+              Optional â€” used only for guest records.
             </p>
           </div>
 
@@ -212,12 +212,12 @@ export function NewBookingDialog({ rooms }: { rooms: Room[] }) {
                   id="roomId"
                   className="border-[#E2DBD0] focus:ring-[#628B35] text-[#103713]"
                 >
-                  <SelectValue placeholder="Select a room…" />
+                  <SelectValue placeholder="Select a roomâ€¦" />
                 </SelectTrigger>
                 <SelectContent>
                   {rooms.map((r) => (
                     <SelectItem key={r.id} value={r.id}>
-                      Room {r.roomNumber} — {r.name} (max {r.capacity})
+                      Room {r.roomNumber} â€” {r.name} (max {r.capacity})
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -294,7 +294,7 @@ export function NewBookingDialog({ rooms }: { rooms: Room[] }) {
               className="bg-[#628B35] hover:bg-[#4f7029] text-[#FFFDF5]"
               disabled={loading}
             >
-              {loading ? 'Creating…' : 'Create Booking'}
+              {loading ? 'Creatingâ€¦' : 'Create Booking'}
             </Button>
           </div>
         </form>

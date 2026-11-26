@@ -1,7 +1,7 @@
-'use client'
+﻿'use client'
 
+import type { LucideIcon } from 'lucide-react'
 import { useState } from 'react'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { signOut } from 'next-auth/react'
 import {
@@ -36,7 +36,7 @@ type Notification = {
   createdAt: Date
 }
 
-const ICON_BY_TYPE: Record<string, any> = {
+const ICON_BY_TYPE: Record<string, LucideIcon> = {
   BOOKING: Calendar,
   PAYMENT: Wallet,
   SYSTEM: Bell,
@@ -255,6 +255,8 @@ export function MessagesDropdown() {
 }
 
 export function ProfileDropdown() {
+  const router = useRouter()
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
@@ -263,18 +265,24 @@ export function ProfileDropdown() {
       >
         <User className="w-5 h-5 text-[#103713]" />
       </DropdownMenuTrigger>
+
       <DropdownMenuContent align="end" className="w-48">
-        <DropdownMenuItem asChild>
-          <Link href="/admin/settings" className="cursor-pointer">
-            Profile
-          </Link>
+        <DropdownMenuItem
+          onClick={() => router.push('/admin/settings')}
+          className="cursor-pointer"
+        >
+          Profile
         </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link href="/admin/settings" className="cursor-pointer">
-            Settings
-          </Link>
+
+        <DropdownMenuItem
+          onClick={() => router.push('/admin/settings')}
+          className="cursor-pointer"
+        >
+          Settings
         </DropdownMenuItem>
+
         <DropdownMenuSeparator />
+
         <DropdownMenuItem
           onClick={() => signOut({ callbackUrl: '/login' })}
           className="cursor-pointer text-red-600 focus:text-red-700 focus:bg-red-50"
@@ -285,3 +293,5 @@ export function ProfileDropdown() {
     </DropdownMenu>
   )
 }
+
+

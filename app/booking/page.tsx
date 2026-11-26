@@ -1,8 +1,9 @@
-
+﻿
 'use client'
 
 import { useEffect, useState, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
+import AvailabilityCalendar from '@/components/booking/AvailabilityCalendar'
 import {
   ArrowLeft,
   CalendarDays,
@@ -59,11 +60,8 @@ function BookingContent() {
 
   // Check availability whenever dates change
   useEffect(() => {
-    setAvailability([])
-    setAvailabilityError('')
 
     if (!form.checkIn || !form.checkOut || form.checkOut <= form.checkIn) {
-      setCheckingAvailability(false)
       return
     }
 
@@ -111,7 +109,7 @@ function BookingContent() {
     checkAvailability()
 
     return () => controller.abort()
-  }, [form.checkIn, form.checkOut])
+  }, [form.checkIn, form.checkOut, form.roomId])
 
   const datesSelected =
     !!form.checkIn && !!form.checkOut && form.checkOut > form.checkIn
@@ -394,7 +392,7 @@ function BookingContent() {
 
                     {availableRooms.map(room => (
                       <option key={room.id} value={room.id}>
-                        {room.name} — ₱{room.basePrice.toLocaleString()}/night
+                        {room.name} â€” â‚±{room.basePrice.toLocaleString()}/night
                       </option>
                     ))}
                   </select>
@@ -410,6 +408,36 @@ function BookingContent() {
                   )}
               </div>
 
+              {/* Room Availability Calendar */}
+              <div className="space-y-3">
+                <h3 className="font-semibold text-[#103713]">
+                  Room Availability Calendar
+                </h3>
+
+                <p className="text-sm text-gray-500">
+                  Select your check-in and check-out dates below.
+                </p>
+
+                <AvailabilityCalendar
+                  roomId={form.roomId}
+                  checkIn={form.checkIn}
+                  checkOut={form.checkOut}
+                  onCheckInChange={(date) =>
+                    setForm(prev => ({
+                      ...prev,
+                      checkIn: date,
+                      checkOut: prev.checkOut <= date ? '' : prev.checkOut,
+                      roomId: prev.roomId,
+                    }))
+                  }
+                  onCheckOutChange={(date) =>
+                    setForm(prev => ({
+                      ...prev,
+                      checkOut: date,
+                    }))
+                  }
+                />
+              </div>
               {/* Guests */}
               <div>
                 <label className="block text-sm font-medium mb-2">
@@ -488,7 +516,7 @@ function BookingContent() {
                     <div>
                       <p className="font-semibold">{selectedRoom.name}</p>
                       <p className="text-sm text-white/70">
-                        Room {selectedRoom.roomNumber} · {selectedRoom.category}
+                        Room {selectedRoom.roomNumber} Â· {selectedRoom.category}
                       </p>
                     </div>
                   </div>
@@ -496,7 +524,7 @@ function BookingContent() {
                   <div className="border-t border-white/20 pt-4 space-y-3">
                     <div className="flex justify-between">
                       <span>Price per night</span>
-                      <span>₱{selectedRoom.basePrice.toLocaleString()}</span>
+                      <span>â‚±{selectedRoom.basePrice.toLocaleString()}</span>
                     </div>
 
                     <div className="flex justify-between">
@@ -506,7 +534,7 @@ function BookingContent() {
 
                     <div className="flex justify-between text-xl font-bold border-t border-white/20 pt-3">
                       <span>Estimated Total</span>
-                      <span>₱{total.toLocaleString()}</span>
+                      <span>â‚±{total.toLocaleString()}</span>
                     </div>
                   </div>
                 </>
@@ -550,3 +578,8 @@ export default function BookingPage() {
     </Suspense>
   )
 }
+
+
+
+
+
