@@ -57,11 +57,9 @@ export default async function HomePage() {
 
   return (
     <main className="overflow-hidden bg-[#FFFDF5] text-[#103713]">
-
       {/* NAVIGATION */}
       <header className="sticky top-0 z-50 border-b border-[#E2DBD0]/70 bg-[#FFFDF5]/95 backdrop-blur-lg">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 md:px-10">
-
           <Link href="/" className="flex items-center gap-3">
             <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#103713] text-[#FFFDF5]">
               <Leaf size={21} />
@@ -117,7 +115,6 @@ export default async function HomePage() {
 
         <div className="relative mx-auto w-full max-w-7xl px-6 py-24 md:px-12">
           <div className="max-w-2xl">
-
             <div className="mb-6 flex items-center gap-3 text-xs tracking-[3px] text-[#D8E6C4]">
               <span className="h-px w-10 bg-[#D8E6C4]" />
               A PLACE TO REST & FEEL AT HOME
@@ -188,7 +185,6 @@ export default async function HomePage() {
         className="scroll-mt-24 px-6 py-20 md:px-12 md:py-28"
       >
         <div className="mx-auto max-w-7xl">
-
           <div className="mb-12 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
             <div>
               <p className="text-xs font-semibold tracking-[3px] text-[#628B35]">
@@ -247,7 +243,7 @@ export default async function HomePage() {
                           className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
                         />
                       ) : (
-                        <div className="flex h-full items-center justify-center bg-gradient-to-br from-[#E2DBD0] to-[#D4CBB9]">
+                        <div className="flex h-full items-center justify-center bg-gradient-to-br from-[#E2DBD0] to-[#D4CBB9">
                           <div className="text-center text-[#103713]/50">
                             <Leaf size={38} className="mx-auto" />
                             <p className="mt-3 text-sm">
@@ -343,51 +339,50 @@ export default async function HomePage() {
 
       {/* ABOUT */}
       <section
-    id="about"
-    className="scroll-mt-24 bg-[#F5F1E8] px-6 py-20 md:px-12 md:py-24"
-  >
-    <div className="mx-auto grid max-w-7xl items-center gap-12 md:grid-cols-2">
+        id="about"
+        className="scroll-mt-24 bg-[#F5F1E8] px-6 py-20 md:px-12 md:py-24"
+      >
+        <div className="mx-auto grid max-w-7xl items-center gap-12 md:grid-cols-2">
+          <div className="relative min-h-[380px] overflow-hidden rounded-2xl md:min-h-[520px]">
+            <img
+              src="/mi-casa-bg.jpg"
+              alt="Mi Casa De Cagsawa"
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+          </div>
 
-      <div className="relative min-h-[380px] overflow-hidden rounded-2xl md:min-h-[520px]">
-        <img
-          src="/mi-casa-bg.jpg"
-          alt="Mi Casa De Cagsawa"
-          className="absolute inset-0 h-full w-full object-cover"
-        />
-      </div>
+          <div>
+            <p className="text-xs font-semibold tracking-[3px] text-[#628B35]">
+              OUR STORY
+            </p>
 
-      <div>
-        <p className="text-xs font-semibold tracking-[3px] text-[#628B35]">
-          OUR STORY
-        </p>
+            <h2 className="mt-4 font-serif text-4xl leading-tight md:text-5xl">
+              More than just
+              <span className="italic"> a place to stay.</span>
+            </h2>
 
-        <h2 className="mt-4 font-serif text-4xl leading-tight md:text-5xl">
-          More than just
-          <span className="italic"> a place to stay.</span>
-        </h2>
+            <p className="mt-6 text-sm leading-8 text-[#103713]/70">
+              At Mi Casa De Cagsawa, we believe every guest deserves
+              a place where comfort and hospitality come together.
+              Whether you are visiting for a vacation, a special occasion,
+              or simply taking time to unwind, we want you to feel welcome.
+            </p>
 
-        <p className="mt-6 text-sm leading-8 text-[#103713]/70">
-          At Mi Casa De Cagsawa, we believe every guest deserves
-          a place where comfort and hospitality come together.
-          Whether you are visiting for a vacation, a special occasion,
-          or simply taking time to unwind, we want you to feel welcome.
-        </p>
+            <p className="mt-4 text-sm leading-8 text-[#103713]/70">
+              Our goal is simple — to make your stay comfortable,
+              memorable, and filled with the warmth of feeling at home.
+            </p>
 
-        <p className="mt-4 text-sm leading-8 text-[#103713]/70">
-          Our goal is simple — to make your stay comfortable,
-          memorable, and filled with the warmth of feeling at home.
-        </p>
-
-        <Link
-          href="#rooms"
-          className="mt-8 inline-flex items-center gap-3 rounded-full bg-[#103713] px-6 py-4 text-sm font-semibold text-white transition hover:bg-[#628B35]"
-        >
-          Find Your Room
-          <ArrowRight size={16} />
-        </Link>
-      </div>
-    </div>
-  </section>
+            <Link
+              href="#rooms"
+              className="mt-8 inline-flex items-center gap-3 rounded-full bg-[#103713] px-6 py-4 text-sm font-semibold text-white transition hover:bg-[#628B35]"
+            >
+              Find Your Room
+              <ArrowRight size={16} />
+            </Link>
+          </div>
+        </div>
+      </section>
 
   {/* WHY MI CASA */}
   <section className="px-6 py-20 md:px-12 md:py-24">
@@ -571,31 +566,63 @@ export default async function HomePage() {
   </section>
 
   {/* CONTACT / CTA */}
-  <section
-    id="contact"
-    className="px-6 pb-20 md:px-12 md:pb-24"
-  >
-    <div className="mx-auto max-w-7xl overflow-hidden rounded-3xl bg-[#E2DBD0] px-7 py-14 text-center md:px-16 md:py-20">
-      <p className="text-xs font-semibold tracking-[3px] text-[#628B35]">
-        YOUR NEXT STAY STARTS HERE
-      </p>
+  <section id="contact" className="px-6 pb-16 md:px-12 md:pb-20">
+    <div className="relative mx-auto max-w-7xl overflow-hidden rounded-[2rem] border border-[#D8D0C2] bg-[#F3EEE5]">
+      {/* Decorative circles */}
+      <div className="pointer-events-none absolute -right-20 -top-24 h-80 w-80 rounded-full border border-[#103713]/10" />
+      <div className="pointer-events-none absolute -right-10 -top-14 h-64 w-64 rounded-full border border-[#103713]/10" />
+      <div className="pointer-events-none absolute -bottom-32 -left-20 h-80 w-80 rounded-full border border-[#628B35]/15" />
 
-      <h2 className="mx-auto mt-4 max-w-2xl font-serif text-4xl md:text-5xl">
-        We would love to welcome you.
-      </h2>
+      {/* Accent strip */}
+      <div className="absolute left-0 top-0 h-full w-1.5 bg-[#628B35]" />
 
-      <p className="mx-auto mt-5 max-w-xl text-sm leading-7 text-[#103713]/65">
-        Whether you are planning ahead or just exploring,
-        your next comfortable stay might be right here.
-      </p>
+      <div className="relative grid items-center gap-12 px-8 py-16 md:grid-cols-[1fr_auto] md:px-16 md:py-20 lg:px-24">
+        {/* Text content */}
+        <div className="max-w-2xl">
+          <div className="flex items-center gap-3 text-xs font-semibold tracking-[3px] text-[#628B35]">
+            <span className="h-px w-8 bg-[#628B35]" />
+            YOUR NEXT STAY STARTS HERE
+          </div>
 
-      <Link
-        href="/booking"
-        className="mt-8 inline-flex items-center gap-3 rounded-full bg-[#103713] px-7 py-4 text-sm font-semibold text-white transition hover:bg-[#628B35]"
-      >
-        Explore Accommodations
-        <ArrowRight size={16} />
-      </Link>
+          <h2 className="mt-6 font-serif text-4xl leading-tight text-[#103713] md:text-5xl lg:text-6xl">
+            A little comfort.
+            <br />
+            <span className="italic">A lot of warmth.</span>
+          </h2>
+
+          <p className="mt-6 max-w-lg text-sm leading-7 text-[#103713]/65 md:text-base">
+            Whether you're planning ahead or simply looking
+            for a place to unwind, Mi Casa is ready to welcome
+            you with comfort and hospitality.
+          </p>
+
+          <p className="mt-5 text-xs tracking-[2px] text-[#103713]/45">
+            COMFORT FEELS LIKE HOME
+          </p>
+        </div>
+
+        {/* Booking action */}
+        <div className="relative flex flex-col items-start md:items-center">
+          <div className="mb-5 flex h-20 w-20 items-center justify-center rounded-full border border-[#103713]/10 bg-[#E2DBD0]">
+            <Leaf size={30} color="#628B35" />
+          </div>
+
+          <Link
+            href="/booking"
+            className="group inline-flex items-center justify-center gap-4 rounded-full bg-[#103713] px-8 py-4 text-sm font-semibold text-white transition duration-300 hover:bg-[#628B35] hover:shadow-lg"
+          >
+            Explore Accommodations
+            <ArrowRight
+              size={17}
+              className="transition-transform duration-300 group-hover:translate-x-1"
+            />
+          </Link>
+
+          <span className="mt-4 text-xs text-[#103713]/45">
+            Find your perfect room
+          </span>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -603,7 +630,6 @@ export default async function HomePage() {
   <footer className="bg-[#0B260D] px-6 py-12 text-white md:px-12">
     <div className="mx-auto max-w-7xl">
       <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
-
         <div>
           <div className="flex items-center gap-3">
             <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#628B35]">
@@ -675,7 +701,6 @@ export default async function HomePage() {
       </div>
     </div>
   </footer>
-
 </main>
-)
+  )
 }

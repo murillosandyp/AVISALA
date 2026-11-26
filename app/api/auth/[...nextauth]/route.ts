@@ -4,7 +4,7 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 import bcrypt from 'bcryptjs'
 import { prisma } from '@/mi-casa-mobile/lib/prisma'
 
-export const authOptions: NextAuthOptions = {
+const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: 'credentials',
@@ -17,13 +17,23 @@ export const authOptions: NextAuthOptions = {
         if (!credentials?.email || !credentials?.password) {
           throw new Error('Email and password required')
         }
+
         const user = await prisma.adminUser.findUnique({
           where: { email: credentials.email },
         })
-        if (!user) throw new Error('Invalid email or password')
 
-        const isValid = await bcrypt.compare(credentials.password, user.passwordHash)
-        if (!isValid) throw new Error('Invalid email or password')
+        if (!user) {
+          throw new Error('Invalid email or password')
+        }
+
+        const isValid = await bcrypt.compare(
+          credentials.password,
+          user.passwordHash
+        )
+
+        if (!isValid) {
+          throw new Error('Invalid email or password')
+        }
 
         if (!credentials.mfaCode || credentials.mfaCode.length !== 6) {
           throw new Error('MFA code must be 6 digits')
@@ -38,24 +48,37 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
-  session: { strategy: 'jwt', maxAge: 60 * 60 * 8 },
-  pages: { signIn: '/login', error: '/login' },
+
+  session: {
+    strategy: 'jwt',
+    maxAge: 60 * 60 * 8,
+  },
+
+  pages: {
+    signIn: '/login',
+    error: '/login',
+  },
+
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
         token.role = (user as any).role
         token.id = user.id
       }
+
       return token
     },
+
     async session({ session, token }) {
       if (session.user) {
         ;(session.user as any).role = token.role
         ;(session.user as any).id = token.id
       }
+
       return session
     },
   },
+
   secret: process.env.NEXTAUTH_SECRET,
 }
 
